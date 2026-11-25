@@ -1,0 +1,20 @@
+{
+  "name": "thin-plan",
+  "version": "1.0.0",
+  "private": true,
+  "description": "薄计划：12 周减脂留线条 Android App",
+  "scripts": {
+    "sync": "cap sync android",
+    "open:android": "cap open android",
+    "build:apk": "cd android && ./gradlew assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.2",
+    "@capacitor/browser": "^8.0.5",
+    "@capacitor/core": "^8.6.2"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^4.0.0",
+    "@capacitor/cli": "^8.6.2"
+  }
+}

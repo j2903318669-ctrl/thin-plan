@@ -1,0 +1,109 @@
+name: Build Android APK & Deploy PWA
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android 36 SDK
+        run: |
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager "platforms;android-36" "build-tools;36.0.0" "platform-tools"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Build debug APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Prepare APK
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk thin-plan.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: thin-plan-apk
+          path: thin-plan.apk
+          if-no-files-found: error
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.0
+          name: 薄计划 v1.0.0
+          body: |
+            ## 薄计划 1.0.0 · 安卓独立安装包
+
+            下载 `thin-plan.apk`，在手机上点开安装。
+            首次安装需要允许浏览器/文件管理器“安装未知应用”。
+
+            - 全徒手第一周训练
+            - 7 天外卖清单
+            - 体重、腰围、训练和饮食打卡
+            - 每周自动调整热量与步数
+            - 数据保存在手机本地
+          files: thin-plan.apk
+          draft: false
+          prerelease: false
+          make_latest: true
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload PWA
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./www
+
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

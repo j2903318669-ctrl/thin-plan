@@ -1,0 +1,8 @@
+{
+  "appId": "com.thinplan.app",
+  "appName": "薄计划",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}
