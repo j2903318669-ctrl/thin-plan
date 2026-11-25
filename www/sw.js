@@ -1,4 +1,4 @@
-const CACHE = 'thin-plan-v4';
+const CACHE = 'thin-plan-v5';
 const ASSETS = [
   './',
   './index.html',

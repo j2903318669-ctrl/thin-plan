@@ -60,8 +60,15 @@
 
   /* ---------------- state ---------------- */
 
+  function startOfWeekISO(iso) {
+    const d = parseISO(iso);
+    const offset = d.getDay() === 0 ? -6 : 1 - d.getDay();
+    return addDays(iso, offset);
+  }
+
   function createState() {
-    const start = todayISO();
+    const start = startOfWeekISO(todayISO());
+    const baseline = todayISO();
     return {
       version: 1,
       startDate: start,
@@ -78,7 +85,7 @@
         steps: APP.baseSteps
       },
       logs: {
-        weights: [{ date: start, kg: APP.startWeight, source: 'start' }],
+        weights: [{ date: baseline, kg: APP.startWeight, source: 'start' }],
         waist: [],
         days: {}
       },
