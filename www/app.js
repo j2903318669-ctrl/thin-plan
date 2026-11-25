@@ -110,7 +110,7 @@
       reviews: []
     };
     if (!raw || typeof raw !== 'object') return s;
-    if (isDateString(raw.startDate)) s.startDate = raw.startDate;
+    if (isDateString(raw.startDate)) s.startDate = startOfWeekISO(raw.startDate);
     if (typeof raw.createdAt === 'string') s.createdAt = raw.createdAt;
     if (raw.profile && typeof raw.profile === 'object') Object.assign(s.profile, raw.profile);
     if (raw.settings && typeof raw.settings === 'object') Object.assign(s.settings, raw.settings);
