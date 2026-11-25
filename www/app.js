@@ -788,12 +788,13 @@
         '</div>' +
       '</section>' +
 
+      (isNativeApp() ? '' :
       '<section class="card">' +
         '<div class="card-head"><div><span class="kicker">INSTALL</span><h2 class="card-title">装到手机桌面</h2>' +
           '<p class="card-sub">装好后从桌面图标打开，不用每次找网址。</p></div></div>' +
         '<p class="tiny muted" style="margin:0 0 10px">Android Chrome：右上角菜单 →「安装应用」或「添加到主屏幕」。<br>iPhone Safari：底部分享按钮 →「添加到主屏幕」→ 添加。</p>' +
         '<p class="file-note">第一次打开后，训练和外卖会缓存到手机；之后没网也能看当天安排。体重记录仍只存在本机浏览器。</p>' +
-      '</section>' +
+      '</section>') +
 
       '<section class="card">' +
         '<div class="card-head"><div><span class="kicker">BACKUP</span><h2 class="card-title">数据与备份</h2>' +
