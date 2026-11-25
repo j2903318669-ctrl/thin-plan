@@ -106,6 +106,9 @@ jobs:
         with:
           path: ./www
 
+      - name: Wait for Pages artifact
+        run: sleep 20
+
       - name: Deploy Pages
         id: deployment
         uses: actions/deploy-pages@v4
